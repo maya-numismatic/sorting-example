@@ -7,27 +7,28 @@ import java.util.LinkedList;
  * Date: 18/04/20
  * Time: 10:03 AM
  */
-public class SortingTest implements Sorting {
+public class SortingTest<T extends Comparable> implements Sorting {
 
-    public void insertionSort(LinkedList<Integer> list, int lowindex, int highindex, boolean reversed) {
+    public void insertionSort(LinkedList list, int lowindex, int highindex, boolean reversed) {
 
         for(int i=lowindex;i<highindex;++i){
 
             int j = i;
 
             if(reversed){
-                while(j > 0 && list.get(j-1)<= list.get(j)){
 
-                    int key = list.get(j);
+                while(j > 0 && ((T)list.get(j-1)).compareTo(((T)list.get(j)))<= 0 ){
+
+                    T key = (T)list.get(j);
                     list.set(j,list.get(j-1));
                     list.set(j-1,key);
                     j = j-1;
 
                 }
             }else{
-                while(j > 0 && list.get(j-1)> list.get(j)){
+                while(j > 0 && ((T)list.get(j-1)).compareTo((T)list.get(j))>=0){
 
-                    int key = list.get(j);
+                    T key = (T)list.get(j);
                     list.set(j,list.get(j-1));
                     list.set(j-1,key);
                     j = j-1;
@@ -38,7 +39,7 @@ public class SortingTest implements Sorting {
         }
     }
 
-    public void quicksort(LinkedList<Integer> list, int lowindex, int highindex, boolean reversed) {
+    public void quicksort(LinkedList list, int lowindex, int highindex, boolean reversed) {
         //check for empty or null array
         if (list == null || list.size() == 0){
             return;
@@ -50,7 +51,7 @@ public class SortingTest implements Sorting {
 
         //Get the pivot element from the middle of the list
         int middle = lowindex + (highindex - lowindex) / 2;
-        int pivot = list.get(middle);
+        T pivot = (T)list.get(middle);
 
         // make left < pivot and right > pivot
         int i = lowindex, j = highindex;
@@ -58,25 +59,25 @@ public class SortingTest implements Sorting {
         {
             //Check until all values on left side array are lower than pivot
             if(reversed){
-                while (list.get(i) > pivot)
+                while (((T)list.get(i)).compareTo(pivot) > 0)
                 {
                     i++;
                 }
             }else
             {
-                while (list.get(i) < pivot)
+                while (((T)list.get(i)).compareTo(pivot) < 0)
                 {
                     i++;
                 }
             }
             //Check until all values on left side array are greater than pivot
             if(reversed){
-                while (list.get(j) < pivot && j>0)
+                while (((T)list.get(j)).compareTo(pivot)< 0 && j>0)
                 {
                     j--;
                 }
             }else{
-                while (list.get(j) > pivot && j>0)
+                while (((T)list.get(j)).compareTo(pivot)>0 && j>0)
                 {
                     j--;
                 }
@@ -105,15 +106,15 @@ public class SortingTest implements Sorting {
     }
 
 
-   private void doMergeSort(LinkedList<Integer> list, int l, int m, int r, boolean reversed)
+   private void doMergeSort(LinkedList<T> list, int l, int m, int r, boolean reversed)
     {
         // Find sizes of two subarrays to be merged
         int n1 = m - l + 1;
         int n2 = r - m;
 
         /* Create temp arrays */
-        LinkedList<Integer> left = new LinkedList();
-        LinkedList<Integer> right = new LinkedList();
+        LinkedList<T> left = new LinkedList();
+        LinkedList<T> right = new LinkedList();
 
         /*Copy data to temp arrays*/
         for (int i=0; i<n1; ++i)
@@ -131,7 +132,7 @@ public class SortingTest implements Sorting {
         int k = l;
         while (i < n1 && j < n2)
         {
-            boolean cond = reversed ? (left.get(i) >= right.get(j)) : (left.get(i) <= right.get(j));
+            boolean cond = reversed ? (((T)left.get(i)).compareTo(((T)right.get(j)))>=0) : (((T)left.get(i)).compareTo(((T)right.get(j)))<=0);
             if (cond)
             {
                 list.set(k,left.get(i));
@@ -180,9 +181,9 @@ public class SortingTest implements Sorting {
         }
     }
 
-    private void swap (LinkedList<Integer> list, int x, int y)
+    private void swap (LinkedList list, int x, int y)
     {
-        int temp = list.get(x);
+        T temp = (T)list.get(x);
         list.set(x,list.get(y));
         list.set(y,temp);
     }
